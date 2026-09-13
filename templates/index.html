@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduSphere | Instant Lecture Study & Quiz Generator</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Application CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div>
+                    <h1>EduSphere <span class="badge">AI Powered</span></h1>
+                    <p class="subtitle">Everything you need to study, in one place</p>
+                </div>
+            </div>
+            <div class="header-actions" id="headerActions" style="display: none;">
+                <button class="btn btn-secondary" onclick="resetUpload()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Upload New PDF
+                </button>
+                <div class="export-dropdown">
+                    <button class="btn btn-primary" onclick="toggleExportMenu()">
+                        <i class="fa-solid fa-download"></i> Export <i class="fa-solid fa-chevron-down ms-1"></i>
+                    </button>
+                    <div class="export-menu" id="exportMenu">
+                        <a href="#" onclick="triggerExport('txt'); return false;"><i class="fa-regular fa-file-lines"></i> Download Plain Text (.txt)</a>
+                        <a href="#" onclick="triggerExport('pdf'); return false;"><i class="fa-regular fa-file-pdf"></i> Download PDF Document (.pdf)</a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- FEATURES STRIP -->
+            <div class="features-strip">
+                <div class="feature-chip">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Condensed Notes</span>
+                </div>
+                <div class="feature-chip">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span>Practice Quiz</span>
+                </div>
+                <div class="feature-chip">
+                    <i class="fa-solid fa-comments"></i>
+                    <span>Ask Questions</span>
+                </div>
+                <div class="feature-chip">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Export Anywhere</span>
+                </div>
+            </div>
+
+            <!-- SECTION 1: UPLOAD AREA -->
+            <section id="uploadSection" class="upload-card">
+                <div class="upload-zone" id="dropZone">
+                    <div class="upload-icon">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h2>Upload Lecture PDF</h2>
+                    <p>Drag and drop your lecture slides or study guide PDF here, or click to browse</p>
+
+                    <input type="file" id="fileInput" accept=".pdf" class="file-input" hidden>
+                    
+                    <button class="btn btn-primary btn-lg" onclick="document.getElementById('fileInput').click()">
+                        <i class="fa-solid fa-folder-open"></i> Select PDF File
+                    </button>
+
+                    <div class="upload-meta">
+                        <span><i class="fa-solid fa-shield-halved"></i> Max 10MB</span>
+                        <span><i class="fa-solid fa-bolt"></i> Single-call Gemini Analysis</span>
+                    </div>
+                </div>
+
+                <div id="fileSelectedInfo" class="selected-file-info" style="display: none;">
+                    <i class="fa-solid fa-file-circle-check"></i>
+                    <span id="selectedFileName">filename.pdf</span>
+                    <button class="btn-icon" onclick="clearSelectedFile()" title="Remove file"><i class="fa-solid fa-xmark"></i></button>
+
+                    <div class="subject-select-row">
+                        <label for="subjectSelect"><i class="fa-solid fa-graduation-cap"></i> Subject/Course</label>
+                        <select id="subjectSelect">
+                            <option value="General">General</option>
+                            <option value="Computer Science">Computer Science</option>
+                            <option value="Mathematics">Mathematics</option>
+                            <option value="Physics">Physics</option>
+                            <option value="Chemistry">Chemistry</option>
+                            <option value="Biology">Biology</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-accent ms-2" onclick="startUploadProcess()">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Process Material
+                    </button>
+                </div>
+            </section>
+
+            <!-- SECTION 2: LOADING / PROCESSING STATE -->
+            <section id="loadingSection" class="loading-card" style="display: none;">
+                <div class="loader-spinner"></div>
+                <h3 id="loadingStatusText">Analyzing PDF with Gemini AI...</h3>
+                <p>Generating condensed notes and a 5-question practice quiz</p>
+                <div class="loading-progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </section>
+
+            <!-- SECTION 3: RESULTS DASHBOARD -->
+            <section id="resultsSection" class="results-section" style="display: none;">
+                
+                <!-- Active Document Info Banner -->
+                <div class="doc-info-banner">
+                    <div class="doc-title">
+                        <i class="fa-regular fa-file-pdf text-accent"></i>
+                        <span id="activeDocName">Document.pdf</span>
+                        <span class="pill" id="activeDocSubject">General</span>
+                    </div>
+                    <div class="tabs-nav">
+                        <button class="tab-btn active" onclick="switchTab('notes')">
+                            <i class="fa-solid fa-list-check"></i> Revision Notes
+                        </button>
+                        <button class="tab-btn" onclick="switchTab('quiz')">
+                            <i class="fa-solid fa-clipboard-question"></i> Practice Quiz
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB 1: REVISION NOTES -->
+                <div id="tabNotes" class="tab-content active">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-book-open"></i> Key Revision Notes</h3>
+                            <span class="pill">Exam Preparedness</span>
+                        </div>
+                        <ul class="notes-list" id="notesList">
+                            <!-- Bullet points injected here dynamically -->
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- TAB 2: INTERACTIVE PRACTICE QUIZ -->
+                <div id="tabQuiz" class="tab-content" style="display: none;">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-circle-question"></i> 5-Question Knowledge Check</h3>
+                            <span id="quizScoreBadge" class="score-badge" style="display:none;">Score: <span id="scoreVal">0</span>/5</span>
+                        </div>
+                        
+                        <form id="quizForm">
+                            <div class="quiz-container" id="quizContainer">
+                                <!-- Quiz questions injected here dynamically -->
+                            </div>
+
+                            <div class="quiz-footer">
+                                <button type="button" class="btn btn-accent btn-lg" onclick="submitQuiz()">
+                                    <i class="fa-solid fa-check-double"></i> Submit Quiz Answers
+                                </button>
+                                <button type="button" class="btn btn-secondary" onclick="resetQuiz()">
+                                    <i class="fa-solid fa-rotate"></i> Reset Quiz
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: PDF Q&A CHAT ASSISTANT -->
+                <div class="qa-section">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <h3><i class="fa-solid fa-comments"></i> Ask Questions About This Lecture</h3>
+                            <p class="text-muted small">AI answers based strictly on your uploaded document content</p>
+                        </div>
+
+                        <div class="qa-chat-box" id="qaChatBox">
+                            <div class="chat-message bot">
+                                <div class="avatar"><i class="fa-solid fa-robot"></i></div>
+                                <div class="bubble">
+                                    I've indexed your PDF! Ask me any specific question about formulas, definitions, or explanations from this lecture.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="qa-input-row">
+                            <input type="text" id="qaInput" placeholder="e.g. What is the main thesis of section 2?" onkeypress="handleQaKeyPress(event)">
+                            <button class="btn btn-primary" onclick="sendStudentQuestion()">
+                                <i class="fa-solid fa-paper-plane"></i> Ask
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Error Toast Notification -->
+    <div id="errorToast" class="toast-error" style="display: none;">
+        <i class="fa-solid fa-circle-exclamation"></i>
+        <span id="errorMessageText">An error occurred.</span>
+        <button class="toast-close" onclick="hideError()">&times;</button>
+    </div>
+
+    <!-- Application Script -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
