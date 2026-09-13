@@ -48,19 +48,7 @@ def init_db():
 
     # Try MySQL initialization
     try:
-        # First ensure database exists
-        admin_conn = pymysql.connect(
-            host=MYSQL_HOST,
-            user=MYSQL_USER,
-            password=MYSQL_PASSWORD,
-            port=MYSQL_PORT,
-            autocommit=True
-        )
-        with admin_conn.cursor() as cursor:
-            cursor.execute(f"CREATE DATABASE IF NOT EXISTS `{MYSQL_DATABASE}`;")
-        admin_conn.close()
-
-        # Connect to target database and create table
+        # Connect directly to the existing MySQL database
         conn = get_mysql_connection()
         with conn.cursor() as cursor:
             cursor.execute("""
