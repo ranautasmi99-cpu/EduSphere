@@ -325,20 +325,7 @@ Possible future enhancements include:
 
 ---
 
-## 👥 Team
 
-**Team:** [Your Team Name]
-
-| Member   | Contribution   |
-| -------- | -------------- |
-| Member 1 | [Contribution] |
-| Member 2 | [Contribution] |
-| Member 3 | [Contribution] |
-| Member 4 | [Contribution] |
-| Member 5 | [Contribution] |
-| Member 6 | [Contribution] |
-
----
 
 ## 📜 License
 
