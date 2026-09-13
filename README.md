@@ -335,4 +335,13 @@ This project was developed as a student hackathon project.
 
 ### Made with Python, Flask & Gemini AI
 
+
+##demo 
+<img width="1506" height="873" alt="image" src="https://github.com/user-attachments/assets/a988191a-f35d-4ff1-baf4-c8d04e1f72f9" />
+<img width="1568" height="1684" alt="image" src="https://github.com/user-attachments/assets/aa6a408e-146f-4f41-bce3-2f1d8d8e350d" />
+<img width="1526" height="3178" alt="image" src="https://github.com/user-attachments/assets/04a2b48f-e852-4328-b988-c70355c6b019" />
+
+
+
+
 **EduSphere — Everything you need to study, in one place.**
