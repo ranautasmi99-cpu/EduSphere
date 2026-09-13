@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,43 +10,78 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- Application CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+
 <body>
-    <div class="background-blobs">
+    <div class="background-blobs" aria-hidden="true">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
         <div class="blob blob-3"></div>
     </div>
 
     <div class="app-container">
+
         <!-- Header -->
         <header class="app-header">
             <div class="brand">
-                <div class="brand-icon">
+                <div class="brand-icon" aria-hidden="true">
                     <i class="fa-solid fa-graduation-cap"></i>
                 </div>
+
                 <div>
-                    <h1>EduSphere <span class="badge">AI Powered</span></h1>
+                    <h1>
+                        EduSphere
+                        <span class="badge">AI Powered</span>
+                    </h1>
                     <p class="subtitle">Everything you need to study, in one place</p>
                 </div>
             </div>
+
             <div class="header-actions" id="headerActions" style="display: none;">
-                <button class="btn btn-secondary" onclick="resetUpload()">
-                    <i class="fa-solid fa-cloud-arrow-up"></i> Upload New PDF
+
+                <button
+                    type="button"
+                    class="btn btn-secondary"
+                    onclick="resetUpload()"
+                    aria-label="Upload a new PDF">
+                    <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i>
+                    Upload New PDF
                 </button>
+
                 <div class="export-dropdown">
-                    <button class="btn btn-primary" onclick="toggleExportMenu()">
-                        <i class="fa-solid fa-download"></i> Export <i class="fa-solid fa-chevron-down ms-1"></i>
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        onclick="toggleExportMenu()"
+                        aria-label="Open export options"
+                        aria-expanded="false">
+                        <i class="fa-solid fa-download" aria-hidden="true"></i>
+                        Export
+                        <i class="fa-solid fa-chevron-down ms-1" aria-hidden="true"></i>
                     </button>
+
                     <div class="export-menu" id="exportMenu">
-                        <a href="#" onclick="triggerExport('txt'); return false;"><i class="fa-regular fa-file-lines"></i> Download Plain Text (.txt)</a>
-                        <a href="#" onclick="triggerExport('pdf'); return false;"><i class="fa-regular fa-file-pdf"></i> Download PDF Document (.pdf)</a>
+                        <button
+                            type="button"
+                            class="export-option"
+                            onclick="triggerExport('txt')">
+                            <i class="fa-regular fa-file-lines" aria-hidden="true"></i>
+                            Download Plain Text (.txt)
+                        </button>
+
+                        <button
+                            type="button"
+                            class="export-option"
+                            onclick="triggerExport('pdf')">
+                            <i class="fa-regular fa-file-pdf" aria-hidden="true"></i>
+                            Download PDF Document (.pdf)
+                        </button>
                     </div>
                 </div>
             </div>
@@ -53,56 +89,110 @@
 
         <!-- Main Content Area -->
         <main class="main-content">
-            
+
             <!-- FEATURES STRIP -->
-            <div class="features-strip">
+            <section class="features-strip" aria-label="EduSphere features">
+
                 <div class="feature-chip">
-                    <i class="fa-solid fa-book-open"></i>
+                    <i class="fa-solid fa-book-open" aria-hidden="true"></i>
                     <span>Condensed Notes</span>
                 </div>
+
                 <div class="feature-chip">
-                    <i class="fa-solid fa-circle-question"></i>
+                    <i class="fa-solid fa-circle-question" aria-hidden="true"></i>
                     <span>Practice Quiz</span>
                 </div>
+
                 <div class="feature-chip">
-                    <i class="fa-solid fa-comments"></i>
+                    <i class="fa-solid fa-comments" aria-hidden="true"></i>
                     <span>Ask Questions</span>
                 </div>
+
                 <div class="feature-chip">
-                    <i class="fa-solid fa-download"></i>
+                    <i class="fa-solid fa-download" aria-hidden="true"></i>
                     <span>Export Anywhere</span>
                 </div>
-            </div>
+
+            </section>
 
             <!-- SECTION 1: UPLOAD AREA -->
-            <section id="uploadSection" class="upload-card">
+            <section id="uploadSection" class="upload-card" aria-labelledby="uploadHeading">
+
                 <div class="upload-zone" id="dropZone">
-                    <div class="upload-icon">
+
+                    <div class="upload-icon" aria-hidden="true">
                         <i class="fa-solid fa-file-pdf"></i>
                     </div>
-                    <h2>Upload Lecture PDF</h2>
-                    <p>Drag and drop your lecture slides or study guide PDF here, or click to browse</p>
 
-                    <input type="file" id="fileInput" accept=".pdf" class="file-input" hidden>
-                    
-                    <button class="btn btn-primary btn-lg" onclick="document.getElementById('fileInput').click()">
-                        <i class="fa-solid fa-folder-open"></i> Select PDF File
+                    <h2 id="uploadHeading">Upload Lecture PDF</h2>
+
+                    <p id="uploadDescription">
+                        Drag and drop your lecture slides or study guide PDF here,
+                        or click to browse
+                    </p>
+
+                    <label for="fileInput" class="sr-only">
+                        Select a lecture PDF file
+                    </label>
+
+                    <input
+                        type="file"
+                        id="fileInput"
+                        name="lecture_pdf"
+                        accept=".pdf,application/pdf"
+                        class="file-input"
+                        hidden
+                        aria-describedby="uploadDescription">
+
+                    <button
+                        type="button"
+                        class="btn btn-primary btn-lg"
+                        onclick="document.getElementById('fileInput').click()">
+                        <i class="fa-solid fa-folder-open" aria-hidden="true"></i>
+                        Select PDF File
                     </button>
 
-                    <div class="upload-meta">
-                        <span><i class="fa-solid fa-shield-halved"></i> Max 10MB</span>
-                        <span><i class="fa-solid fa-bolt"></i> Single-call Gemini Analysis</span>
+                    <div class="upload-meta" aria-label="Upload information">
+                        <span>
+                            <i class="fa-solid fa-shield-halved" aria-hidden="true"></i>
+                            Max 10MB
+                        </span>
+
+                        <span>
+                            <i class="fa-solid fa-bolt" aria-hidden="true"></i>
+                            Single-call Gemini Analysis
+                        </span>
                     </div>
+
                 </div>
 
-                <div id="fileSelectedInfo" class="selected-file-info" style="display: none;">
-                    <i class="fa-solid fa-file-circle-check"></i>
+                <div
+                    id="fileSelectedInfo"
+                    class="selected-file-info"
+                    style="display: none;"
+                    aria-live="polite">
+
+                    <i class="fa-solid fa-file-circle-check" aria-hidden="true"></i>
+
                     <span id="selectedFileName">filename.pdf</span>
-                    <button class="btn-icon" onclick="clearSelectedFile()" title="Remove file"><i class="fa-solid fa-xmark"></i></button>
+
+                    <button
+                        type="button"
+                        class="btn-icon"
+                        onclick="clearSelectedFile()"
+                        title="Remove selected file"
+                        aria-label="Remove selected file">
+                        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+                    </button>
 
                     <div class="subject-select-row">
-                        <label for="subjectSelect"><i class="fa-solid fa-graduation-cap"></i> Subject/Course</label>
-                        <select id="subjectSelect">
+
+                        <label for="subjectSelect">
+                            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+                            Subject/Course
+                        </label>
+
+                        <select id="subjectSelect" name="subject">
                             <option value="General">General</option>
                             <option value="Computer Science">Computer Science</option>
                             <option value="Mathematics">Mathematics</option>
@@ -111,107 +201,302 @@
                             <option value="Biology">Biology</option>
                             <option value="Other">Other</option>
                         </select>
+
                     </div>
 
-                    <button class="btn btn-accent ms-2" onclick="startUploadProcess()">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Process Material
+                    <button
+                        type="button"
+                        class="btn btn-accent ms-2"
+                        onclick="startUploadProcess()">
+                        <i class="fa-solid fa-wand-magic-sparkles" aria-hidden="true"></i>
+                        Process Material
                     </button>
+
                 </div>
             </section>
 
             <!-- SECTION 2: LOADING / PROCESSING STATE -->
-            <section id="loadingSection" class="loading-card" style="display: none;">
-                <div class="loader-spinner"></div>
-                <h3 id="loadingStatusText">Analyzing PDF with Gemini AI...</h3>
-                <p>Generating condensed notes and a 5-question practice quiz</p>
-                <div class="loading-progress-bar">
+            <section
+                id="loadingSection"
+                class="loading-card"
+                style="display: none;"
+                aria-live="polite"
+                aria-busy="true">
+
+                <div class="loader-spinner" aria-hidden="true"></div>
+
+                <h3 id="loadingStatusText">
+                    Analyzing PDF with Gemini AI...
+                </h3>
+
+                <p>
+                    Generating condensed notes and a 5-question practice quiz
+                </p>
+
+                <div
+                    class="loading-progress-bar"
+                    role="progressbar"
+                    aria-label="PDF processing progress"
+                    aria-valuemin="0"
+                    aria-valuemax="100">
                     <div class="progress-fill"></div>
                 </div>
+
             </section>
 
             <!-- SECTION 3: RESULTS DASHBOARD -->
-            <section id="resultsSection" class="results-section" style="display: none;">
-                
+            <section
+                id="resultsSection"
+                class="results-section"
+                style="display: none;"
+                aria-labelledby="resultsHeading">
+
+                <h2 id="resultsHeading" class="sr-only">
+                    Study Material Results
+                </h2>
+
                 <!-- Active Document Info Banner -->
                 <div class="doc-info-banner">
+
                     <div class="doc-title">
-                        <i class="fa-regular fa-file-pdf text-accent"></i>
+
+                        <i
+                            class="fa-regular fa-file-pdf text-accent"
+                            aria-hidden="true"></i>
+
                         <span id="activeDocName">Document.pdf</span>
-                        <span class="pill" id="activeDocSubject">General</span>
+
+                        <span
+                            class="pill"
+                            id="activeDocSubject">
+                            General
+                        </span>
+
                     </div>
-                    <div class="tabs-nav">
-                        <button class="tab-btn active" onclick="switchTab('notes')">
-                            <i class="fa-solid fa-list-check"></i> Revision Notes
+
+                    <div
+                        class="tabs-nav"
+                        role="tablist"
+                        aria-label="Study material sections">
+
+                        <button
+                            type="button"
+                            class="tab-btn active"
+                            onclick="switchTab('notes')"
+                            role="tab"
+                            aria-selected="true"
+                            aria-controls="tabNotes"
+                            id="notesTab">
+
+                            <i
+                                class="fa-solid fa-list-check"
+                                aria-hidden="true"></i>
+
+                            Revision Notes
                         </button>
-                        <button class="tab-btn" onclick="switchTab('quiz')">
-                            <i class="fa-solid fa-clipboard-question"></i> Practice Quiz
+
+                        <button
+                            type="button"
+                            class="tab-btn"
+                            onclick="switchTab('quiz')"
+                            role="tab"
+                            aria-selected="false"
+                            aria-controls="tabQuiz"
+                            id="quizTab">
+
+                            <i
+                                class="fa-solid fa-clipboard-question"
+                                aria-hidden="true"></i>
+
+                            Practice Quiz
                         </button>
+
                     </div>
                 </div>
 
                 <!-- TAB 1: REVISION NOTES -->
-                <div id="tabNotes" class="tab-content active">
+                <div
+                    id="tabNotes"
+                    class="tab-content active"
+                    role="tabpanel"
+                    aria-labelledby="notesTab">
+
                     <div class="content-card">
+
                         <div class="card-header">
-                            <h3><i class="fa-solid fa-book-open"></i> Key Revision Notes</h3>
-                            <span class="pill">Exam Preparedness</span>
+
+                            <h3>
+                                <i
+                                    class="fa-solid fa-book-open"
+                                    aria-hidden="true"></i>
+                                Key Revision Notes
+                            </h3>
+
+                            <span class="pill">
+                                Exam Preparedness
+                            </span>
+
                         </div>
-                        <ul class="notes-list" id="notesList">
-                            <!-- Bullet points injected here dynamically -->
+
+                        <ul
+                            class="notes-list"
+                            id="notesList"
+                            aria-label="Generated revision notes">
                         </ul>
+
                     </div>
                 </div>
 
                 <!-- TAB 2: INTERACTIVE PRACTICE QUIZ -->
-                <div id="tabQuiz" class="tab-content" style="display: none;">
+                <div
+                    id="tabQuiz"
+                    class="tab-content"
+                    style="display: none;"
+                    role="tabpanel"
+                    aria-labelledby="quizTab">
+
                     <div class="content-card">
+
                         <div class="card-header">
-                            <h3><i class="fa-solid fa-circle-question"></i> 5-Question Knowledge Check</h3>
-                            <span id="quizScoreBadge" class="score-badge" style="display:none;">Score: <span id="scoreVal">0</span>/5</span>
+
+                            <h3>
+                                <i
+                                    class="fa-solid fa-circle-question"
+                                    aria-hidden="true"></i>
+                                5-Question Knowledge Check
+                            </h3>
+
+                            <span
+                                id="quizScoreBadge"
+                                class="score-badge"
+                                style="display:none;"
+                                aria-live="polite">
+
+                                Score:
+                                <span id="scoreVal">0</span>/5
+
+                            </span>
+
                         </div>
-                        
+
                         <form id="quizForm">
-                            <div class="quiz-container" id="quizContainer">
-                                <!-- Quiz questions injected here dynamically -->
+
+                            <div
+                                class="quiz-container"
+                                id="quizContainer">
                             </div>
 
                             <div class="quiz-footer">
-                                <button type="button" class="btn btn-accent btn-lg" onclick="submitQuiz()">
-                                    <i class="fa-solid fa-check-double"></i> Submit Quiz Answers
+
+                                <button
+                                    type="button"
+                                    class="btn btn-accent btn-lg"
+                                    onclick="submitQuiz()">
+
+                                    <i
+                                        class="fa-solid fa-check-double"
+                                        aria-hidden="true"></i>
+
+                                    Submit Quiz Answers
                                 </button>
-                                <button type="button" class="btn btn-secondary" onclick="resetQuiz()">
-                                    <i class="fa-solid fa-rotate"></i> Reset Quiz
+
+                                <button
+                                    type="button"
+                                    class="btn btn-secondary"
+                                    onclick="resetQuiz()">
+
+                                    <i
+                                        class="fa-solid fa-rotate"
+                                        aria-hidden="true"></i>
+
+                                    Reset Quiz
                                 </button>
+
                             </div>
+
                         </form>
                     </div>
                 </div>
 
                 <!-- SECTION 4: PDF Q&A CHAT ASSISTANT -->
-                <div class="qa-section">
+                <section
+                    class="qa-section"
+                    aria-labelledby="qaHeading">
+
                     <div class="content-card">
+
                         <div class="card-header">
-                            <h3><i class="fa-solid fa-comments"></i> Ask Questions About This Lecture</h3>
-                            <p class="text-muted small">AI answers based strictly on your uploaded document content</p>
+
+                            <h3 id="qaHeading">
+                                <i
+                                    class="fa-solid fa-comments"
+                                    aria-hidden="true"></i>
+                                Ask Questions About This Lecture
+                            </h3>
+
+                            <p class="text-muted small">
+                                AI answers based strictly on your uploaded document content
+                            </p>
+
                         </div>
 
-                        <div class="qa-chat-box" id="qaChatBox">
+                        <div
+                            class="qa-chat-box"
+                            id="qaChatBox"
+                            role="log"
+                            aria-live="polite"
+                            aria-label="AI question and answer conversation">
+
                             <div class="chat-message bot">
-                                <div class="avatar"><i class="fa-solid fa-robot"></i></div>
-                                <div class="bubble">
-                                    I've indexed your PDF! Ask me any specific question about formulas, definitions, or explanations from this lecture.
+
+                                <div
+                                    class="avatar"
+                                    aria-hidden="true">
+                                    <i class="fa-solid fa-robot"></i>
                                 </div>
+
+                                <div class="bubble">
+                                    I've indexed your PDF! Ask me any specific question
+                                    about formulas, definitions, or explanations from this lecture.
+                                </div>
+
                             </div>
+
                         </div>
 
                         <div class="qa-input-row">
-                            <input type="text" id="qaInput" placeholder="e.g. What is the main thesis of section 2?" onkeypress="handleQaKeyPress(event)">
-                            <button class="btn btn-primary" onclick="sendStudentQuestion()">
-                                <i class="fa-solid fa-paper-plane"></i> Ask
+
+                            <label
+                                for="qaInput"
+                                class="sr-only">
+                                Ask a question about the lecture
+                            </label>
+
+                            <input
+                                type="text"
+                                id="qaInput"
+                                name="question"
+                                placeholder="e.g. What is the main thesis of section 2?"
+                                autocomplete="off"
+                                aria-label="Ask a question about the lecture"
+                                onkeypress="handleQaKeyPress(event)">
+
+                            <button
+                                type="button"
+                                class="btn btn-primary"
+                                onclick="sendStudentQuestion()">
+
+                                <i
+                                    class="fa-solid fa-paper-plane"
+                                    aria-hidden="true"></i>
+
+                                Ask
                             </button>
+
                         </div>
+
                     </div>
-                </div>
+                </section>
 
             </section>
 
@@ -219,13 +504,36 @@
     </div>
 
     <!-- Error Toast Notification -->
-    <div id="errorToast" class="toast-error" style="display: none;">
-        <i class="fa-solid fa-circle-exclamation"></i>
-        <span id="errorMessageText">An error occurred.</span>
-        <button class="toast-close" onclick="hideError()">&times;</button>
+    <div
+        id="errorToast"
+        class="toast-error"
+        style="display: none;"
+        role="alert"
+        aria-live="assertive">
+
+        <i
+            class="fa-solid fa-circle-exclamation"
+            aria-hidden="true"></i>
+
+        <span id="errorMessageText">
+            An error occurred.
+        </span>
+
+        <button
+            type="button"
+            class="toast-close"
+            onclick="hideError()"
+            aria-label="Close error message">
+
+            <span aria-hidden="true">&times;</span>
+
+        </button>
+
     </div>
 
     <!-- Application Script -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+
 </body>
 </html>
+```
